@@ -1,3 +1,6 @@
+import PIL
+from PIL import Image, ImageEnhance, ImageOps, ImageFilter, ImageChops
+import PIL.ImageGrab
 from PIL import ImageTk
 import os
 import string
@@ -24,7 +27,6 @@ def tti2():
             for a in range(4):
                 addX = a * 13
                 im = PIL.ImageGrab.grab(bbox=(x1 + addX, y1, x1 + addX + 13, y2))  # X1,Y1,X2,Y2
-                immatrix = np.array(im)
 
                 im.save(code + str(a) + ".jpg")
 
@@ -41,7 +43,6 @@ def timecheck2():
             print('Stopping bot to prevent crash')
             break
         elif current_time[1] in snipelist:
-            label['text'] = 'Bot commencing'
             tti2()
         else:
             print(f'cycling: {current_time[0]}:{current_time[1]} - IZ*ONECord')
