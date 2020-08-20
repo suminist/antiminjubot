@@ -21,7 +21,8 @@ cfile = r'config.ini'
 config = ConfigParser()
 config.read(cfile)
 
-#Premade Times
+#Premade Time
+
 wkcord_s = config['Premade Times']['wkcord_s']
 wkcord_s = wkcord_s.split(" ")
 wkcord_e = config['Premade Times']['wkcord_e']
@@ -52,24 +53,24 @@ custom_ss = int(custom_ss)
 custom_ee = config['Custom Time']['custom_ee']
 custom_ee = int(custom_ee)
 
-
 class Sniperbot:
 
     t = time.localtime()
     current_time = time.strftime("%H:%M:%S", t)
     current_time = current_time.split(':')
-    def __init__(self, ss, cord):
+    def __init__(self, ss,ee, cord):
         self.cord = cord
         self.ss = ss
-        
+        self.ee = ee
     def timecheck(self):
+        startlist = []
         if self.cord.lower() == 'weeekly':
             startlist = wkcord_s
         elif self.cord.lower() == 'iz*one':
             startlist = izcord_s
         elif self.cord.lower() == 'custom_s':
             startlist = custom_s
-        
+        sstime = 0
         if self.ss == 'wkcord_ss':
             sstime = wkcord_ss
         elif self.ss == 'izcord_ss':
@@ -77,31 +78,32 @@ class Sniperbot:
         elif self.ss == 'custom_ss':
             sstime = custom_ss
 
-        if self.current_time[2] < sstime:
+        if int(self.current_time[2]) < sstime:
             if Sniperbot.current_time[1] in startlist:
                 print('Bot commencing')
                 self.tti()
         else:
-            print(f'cycling via SStime: {Sniperbot.current_time[0]}:{Sniperbot.current_time[1]} - WeeklyCord')
+            print(f'cycling via SStime: {Sniperbot.current_time[0]}:{Sniperbot.current_time[1]} - {self.cord.capitalize()}')
             time.sleep(10)
             self.timecheck()
 
     def tti(self): #tti stands for text to image kekw
+        stoplist = []
         if self.cord == 'weeekly':
             stoplist = wkcord_e
         elif self.cord == 'iz*one':
             stoplist = izcord_e
         elif self.cord == 'custom_e':
             stoplist = custom_e
-
-        if self.ss == 'wkcord_ee':
+        sstime = 0
+        if self.ee == 'wkcord_ee':
             sstime = wkcord_ee
-        elif self.ss == 'izcord_ee':
+        elif self.ee == 'izcord_ee':
             sstime = izcord_ee
-        elif self.ss == 'custom_ee':
+        elif self.ee == 'custom_ee':
             sstime = custom_ee
         
-        if self.current_time[2] > sstime or sstime == 0:
+        if int(self.current_time[2]) > sstime or sstime == 0:
             if Sniperbot.current_time[1] in stoplist:
                 print('it is not time yet')
                 self.timecheck()
@@ -163,15 +165,21 @@ class Sniperbot:
                         pyautogui.hotkey('enter')
                         print('Mission Success we got em bois')
                         print(text)
-                        isrunning.config(text="Timecheck Phase 2")
-                        isrunning.after(2000, self.timecheck())
+                        is2.config(text="Timecheck Phase 2")
+                        is2.after(2000, self.timecheck())
                 except:
                     self.tti()
         else:
             self.timecheck()
 
-def startbot():
-    bot = Sniperbot(0, 'weeekly')
+def wkstart():
+    bot = Sniperbot(wkcord_ss, wkcord_ee, 'weeekly')
+    bot.timecheck()
+def izstart():
+    bot = Sniperbot(izcord_ss, izcord_ee, 'iz*one')
+    bot.timecheck()
+def custart():
+    bot = Sniperbot(custom_ss, custom_ee, 'custom')
     bot.timecheck()
 
 def viewimg():
@@ -189,14 +197,41 @@ def clock():
     lclock.config(text=f"{hour}:{minute}:{second}")
     lclock.after(1000, clock)
 
+def showcord(event):
+    scord = cord.get()
+    label2.config(text=f"Selected Target: {cord.get()}")
+    if scord == "Weeekly":
+        label2x.config(text="Start: " + " | ".join(wkcord_s))
+        label2y.config(text="End: " + " | ".join(wkcord_e))
+        label2z.config(text=f"Start:{wkcord_ss} End:{wkcord_ee}")
+        button.config(command=wkstart)
+    elif scord == "IZ*ONE":
+        label2x.config(text="Start: " + " | ".join(izcord_s))
+        label2y.config(text="End: " + " | ".join(izcord_e))
+        label2z.config(text=f"Start:{izcord_ss} End:{izcord_ee}")
+        button.config(command=izstart)
+    elif scord == "Custom Time":
+        label2x.config(text="Start: " + " | ".join(custom_s))
+        label2y.config(text="End: " + " | ".join(custom_e))
+        label2z.config(text=f"Start:{custom_ss} End:{custom_ee}")
+        button.config(command=custart)
+    elif scord == "None":
+        label2x.config(text="No start times selected")
+        label2y.config(text="No end times selected")
+        label2z.config(text="No Specific time selected")
+        button.config(command=None)
+def startbot():
+    print('meow')
+
 ht = 400
 wd = 596
 mvall = 0.5
 mvallh = 0.25
-root = tk.Tk()
 
 version = 'SYBot V.2.1.1-a.1'
 
+
+root = tk.Tk()
 #main canvas
 canvas = tk.Canvas(root, height=ht,width=wd)
 canvas.pack()
@@ -213,9 +248,9 @@ label = tk.Label(frame, text='Starts bot instantly', bg='black', fg='pink')
 label.pack()
 
 cord = StringVar()
-cord.set("Weeekly")
+cord.set("None")
 
-drop = OptionMenu(frame, cord, "Weeekly", "IZ*ONE", "Custom Time")
+drop = OptionMenu(frame, cord,"None", "Weeekly", "IZ*ONE", "Custom Time", command=showcord)
 drop.pack()
 
 button = tk.Button(frame, text="Start Bot", bg='black', fg='pink', command=startbot)
@@ -225,17 +260,18 @@ button.pack(side='bottom')
 frame2 = tk.Frame(root, bg='black')
 frame2.place(relx=0, rely=0.25, relwidth=mvall, relheight=0.5)
 
-label2 = tk.Label(frame2, text="WeeeklyCord",font=("Helvetica", 10), bg='black', fg='#add8e6')
+#cord name
+label2 = tk.Label(frame2, text="Selected Cord: None",font=("Helvetica", 10), bg='black', fg='#add8e6')
 label2.pack()
-
-label2x = tk.Label(frame2, text=" | ".join(wkcord_s), bg='black', fg='pink')
+#start times
+label2x = tk.Label(frame2, text="Start times: None", bg='black', fg='pink')
 label2x.pack()
-
-label2x = tk.Label(frame2, text="IZ*ONECord",font=("Helvetica", 10), bg='black', fg='#add8e6')
-label2x.pack()
-
-label2x = tk.Label(frame2, text=" | ".join(wkcord_e), bg='black', fg='pink')
-label2x.pack()
+#end times
+label2y = tk.Label(frame2, text="End times: None", bg='black', fg='pink')
+label2y.pack()
+#specific seconds
+label2z = tk.Label(frame2, text="Specific times: None", bg='black', fg='pink')
+label2z.pack()
 
 #frame 4
 frame4 = tk.Frame(root, bg='black')
@@ -256,8 +292,8 @@ clock()
 
 isrunning = tk.Label(frame2, text="Isitrunning?",font=("Helvetica", 10), bg="black", fg="#add8e6")
 isrunning.pack()
-isrunning = tk.Label(frame2, text="", bg="black", fg="pink")
-isrunning.pack()
+is2 = tk.Label(frame2, text="", bg="black", fg="pink")
+is2.pack()
 
 root.iconbitmap(r'myicon.ico')
 root.title(f'Sniperbot {version}')
