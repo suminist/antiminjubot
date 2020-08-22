@@ -10,57 +10,58 @@ import sys
 
 np.set_printoptions(threshold=sys.maxsize)
 
-x1 = 454
-x2 = 506
+x1 = 450
+x2 = 510
 y1 = 934
 y2 = 949
 
 def snipecode():
-    code = "Z8F0"
+    im = PIL.ImageGrab.grab(bbox=(x1, y1, x2, y2))
 
-    # for a in range(4):
-    #     addX = a * 13
-        # im = PIL.ImageGrab.grab(bbox=(x1 + addX, y1, x1 + addX + 13, y2))  # X1,Y1,X2,Y2 # A
-    im = PIL.ImageGrab.grab(bbox=(x1, y1, x2, y2))  # X1,Y1,X2,Y2 # B
-    immatrix = np.array(im).T
+    # im.show()
 
-    im.show()
+    immatrix = np.array(im)
+    immatrixT = immatrix.T[0]
+
     print(np.shape(immatrix))
+    print(np.shape(immatrixT))
 
-    # file2write = open("matrix" + str(a), 'w') # A
-    file2write = open("matrix", 'w') # B
-    file2write.write(str(immatrix))
+    thresholdIndices0 = immatrixT < 160
+    immatrixT[thresholdIndices0] = 0
+
+    thresholdIndices1 = immatrixT > 200
+    immatrixT[thresholdIndices1] = 255
+
+    # img = Image.fromarray(immatrixT.T).show()
+
+    score = np.sum(immatrixT, axis=1)
+
+    thresholdIndices2 = score != 0
+    score[thresholdIndices2] = 1
+
+    zero = np.where(score == 0)
+    nonzero = np.where(score != 0)
+    changes = np.where(np.diff(score))[0]+1
+    immatrixTsplit = np.split(immatrixT, changes)
+
+    print(score)
+    print(zero)
+    print(nonzero)
+    print(changes)
+    print(np.shape(immatrixTsplit))
+
+    file2write = open("matrix", 'w')
+    file2write.write(str(immatrixT))
     file2write.close()
 
-    # if a == 0:
-    #     mse(immatrix, immatrix)
+    file2write = open("matrix1", 'w')
 
+    for i in range(9):
+        file2write.write(str(i) + "\n" + str(immatrixTsplit[i]) + "\n")
 
-def snipecode1():
-    code = "Z8F0"
-
-    addX1 = 1 * 13
-    addX2 = 3 * 13
-
-    im1 = PIL.ImageGrab.grab(bbox=(x1 + addX1, y1, x1 + addX1 + 13, y2))  # X1,Y1,X2,Y2
-    immatrix1 = np.array(im1)
-
-    im2 = PIL.ImageGrab.grab(bbox=(x1 + addX2, y1, x1 + addX2 + 13, y2))  # X1,Y1,X2,Y2
-    immatrix2 = np.array(im2)
-
-    mse(immatrix1, immatrix2)
-
-    im1.show()
-    im2.show()
-
-def mse(imageA, imageB):
-	error = np.sum((imageA - imageB.astype("float")) ** 2)
-	error /= float(imageA.shape[0] * imageA.shape[1])
-
-	print(error)
+    file2write.close()
 
 def main():
     snipecode()
-    # snipecode1()
 
 main()
