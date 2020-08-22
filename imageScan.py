@@ -1,12 +1,12 @@
 import PIL
 import PIL.ImageGrab
 from PIL import Image, ImageEnhance, ImageOps, ImageFilter, ImageChops
+import sys
 import os
 import string
-import datetime
 import time
 import numpy as np
-import sys
+from skimage.io import imread, imsave
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -67,6 +67,11 @@ def snipecode():
 
     for i in range(4):
         code += read(immatrixTsplit[2 * i])
+
+        fileN = open("v" + str(i), "w")
+        fileN.write(str(immatrixTsplit[2 * i]))
+        fileN.close()
+
         file0.write(str(i) + "\n" + str(immatrixTsplit[2 * i]) + "\n")
 
     file0.close()
@@ -85,5 +90,6 @@ def read(matrix):
 
 def main():
     snipecode()
+    # testLetter("Q")
 
 main()
