@@ -12,99 +12,8 @@ from pathlib import Path
 import os
 from PIL import ImageTk
 
-#disclaimer: this code is very bad
-
-def tti():
-    stoplist = ['13','28', '43', '58']
-    while True:
-        t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
-        current_time = current_time.split(':')
-        if current_time[1] in stoplist:
-            print('it is not time yet')
-            timecheck()
-        else:
-            im = PIL.ImageGrab.grab(bbox=(447,933, 510,953))  # X1,Y1,X2,Y2
-            custom_config = r'--oem 3 --psm 7'
-            text = tess.image_to_string(im, config=custom_config)
-            ''.join(e for e in text if e.isalnum())
-            lz = list(text)
-            try:
-                if lz[0] == 'j':
-                    lz.remove(''.join(lz[0]))
-                if lz[3].lower() == 'o':
-                    lz[3] = '0'
-                    print('modified 1')
-                if lz[1].lower() == 'o':
-                    lz[1] = '0'
-                    print('modified 2')
-                if lz[3].lower() == 'i':
-                    lz[3] = '9'
-                    print('modified 3')
-                if lz[1].lower() == 's':
-                    lz[1] = '9'
-                    print('modified 4')
-                if lz[3].lower() == 's':
-                    lz[3] = '8'
-                    print('modified 5')
-                if lz[1].lower() == 'i':
-                    lz[1] = '1'
-                    print('modified 6')
-                if lz[2] == '6':
-                    lz[2] = 'G'
-                    print('modified 6x')
-                if lz[2].islower() == True:
-                    lz.remove(''.join(lz[2]))
-                    print('modified 7')
-                if lz[0] == '5':
-                    lz[0] = 'T'
-                    print('modified 8')
-                if lz[2] == '3':
-                    lz[2] = 'H'
-                    print('modified 9')
-                if lz[0] == '0':
-                    lz[0] = 'O'
-                    print('modified 10')
-                if lz[2] == '0':
-                    lz[2] = 'O'
-                    print('modified 11')
-            except:
-                pass
-            try:
-                if lz[0].isalpha == False or lz[1].isnumeric() == False or lz[1] == 'l' or lz[3].isnumeric() == False:
-                    print(lz)
-                    tti()
-                else:
-                    text = ''.join(lz[0:4])
-                    text = text.upper()
-                    pyautogui.typewrite(f'!claim {text}')
-                    pyautogui.hotkey('enter')
-                    time.sleep(2)
-                    print('Mission Success we got em bois')
-                    print(text)
-                    timecheck()
-            except:
-                tti()
-
-def timecheck():
-    snipelist = ['12', '27', '42', '57']
-    while True:
-        t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
-        current_time = current_time.split(':')
-        if current_time[1] == '50':
-            print('Stopping bot to prevent crash')
-            break
-        elif current_time[1] in snipelist:
-            label['text'] = 'Bot commencing'
-            tti()
-        else:
-            print(f'cycling: {current_time[0]}:{current_time[1]} - WeeklyCord')
-            time.sleep(10)
-            timecheck()
-
 def tti2():
-    stoplist = ['06', '14', '21', '29', '36', '44','51','59']
+    stoplist = ['05', '13', '20', '28', '35', '43','50','58']
     while True:
         t = time.localtime()
         current_time = time.strftime("%H:%M:%S", t)
@@ -176,7 +85,7 @@ def tti2():
                 tti2()
 
 def timecheck2():
-    snipelist = ['05', '13', '20', '28', '35', '43', '50', '58']
+    snipelist = ['04', '12', '19', '27', '34', '42','49','57']
     while True:
         t = time.localtime()
         current_time = time.strftime("%H:%M:%S", t)
@@ -191,96 +100,6 @@ def timecheck2():
             print(f'cycling: {current_time[0]}:{current_time[1]} - IZ*ONECord')
             time.sleep(10)
             timecheck2()
-
-def timecheck3():
-    snipelist = ['00', '04', '07', '10', '14', '17', '20', '24', '27', '30', '34', '37', '40', '44', '47', '49', '54', '57']
-    while True:
-        t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
-        current_time = current_time.split(':')
-        if current_time[1] == '50':
-            print('Stopping bot to prevent crash')
-            break
-        elif current_time[1] in snipelist:
-            label['text'] = 'Bot commencing'
-            tti3()
-        else:
-            print(f'cycling: {current_time[0]}:{current_time[1]} - IZ*ONECord')
-            time.sleep(10)
-            timecheck3()
-
-def tti3():
-    stoplist = ['01', '05', '08', '11', '15', '18', '21', '25',
-                '28', '31', '35', '38', '41', '45', '48', '40', '55', '58']
-    while True:
-        t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
-        current_time = current_time.split(':')
-        if current_time[1] in stoplist:
-            print('it is not time yet')
-            timecheck2()
-        else:
-            im = PIL.ImageGrab.grab(bbox=(447, 933, 510, 953))  # X1,Y1,X2,Y2
-            custom_config = r'--oem 3 --psm 7'
-            text = tess.image_to_string(im, config=custom_config)
-            ''.join(e for e in text if e.isalnum())
-            lz = list(text)
-            try:
-                if lz[0] == 'j':
-                    lz.remove(''.join(lz[0]))
-                if lz[3].lower() == 'o':
-                    lz[3] = '0'
-                    print('modified 1')
-                if lz[1].lower() == 'o':
-                    lz[1] = '0'
-                    print('modified 2')
-                if lz[3].lower() == 'i':
-                    lz[3] = '9'
-                    print('modified 3')
-                if lz[1].lower() == 's':
-                    lz[1] = '9'
-                    print('modified 4')
-                if lz[3].lower() == 's':
-                    lz[3] = '8'
-                    print('modified 5')
-                if lz[1].lower() == 'i':
-                    lz[1] = '1'
-                    print('modified 6')
-                if lz[2] == '6':
-                    lz[2] = 'G'
-                    print('modified 6x')
-                if lz[2].islower() == True:
-                    lz.remove(''.join(lz[2]))
-                    print('modified 7')
-                if lz[0] == '5':
-                    lz[0] = 'T'
-                    print('modified 8')
-                if lz[2] == '3':
-                    lz[2] = 'H'
-                    print('modified 9')
-                if lz[0] == '0':
-                    lz[0] = 'O'
-                    print('modified 10')
-                if lz[2] == '0':
-                    lz[2] = 'O'
-                    print('modified 11')
-            except:
-                pass
-            try:
-                if lz[0].isalpha == False or lz[1].isnumeric() == False or lz[1] == 'l' or lz[3].isnumeric() == False:
-                    print(lz)
-                    tti2()
-                else:
-                    text = ''.join(lz[0:4])
-                    text = text.upper()
-                    pyautogui.typewrite(f'!claim {text}')
-                    pyautogui.hotkey('enter')
-                    time.sleep(2)
-                    print('Mission Success we got em bois')
-                    print(text)
-                    timecheck3()
-            except:
-                tti3()
 
 def ttinstant():
     im = PIL.ImageGrab.grab(bbox=(447,933, 510,953))  # X1,Y1,X2,Y2

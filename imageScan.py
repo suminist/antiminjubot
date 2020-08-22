@@ -1,66 +1,66 @@
 import PIL
-from PIL import Image, ImageEnhance, ImageOps, ImageFilter, ImageChops
 import PIL.ImageGrab
-from PIL import ImageTk
+from PIL import Image, ImageEnhance, ImageOps, ImageFilter, ImageChops
 import os
 import string
 import datetime
 import time
 import numpy as np
+import sys
+
+np.set_printoptions(threshold=sys.maxsize)
 
 x1 = 454
+x2 = 506
 y1 = 934
-y2 = 950
-
-def tti2():
-    stoplist = ['05', '13', '20', '28', '35', '43', '50', '58']
-    while True:
-        t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
-        current_time = current_time.split(':')
-        if current_time[1] in stoplist:
-            print('it is not time yet')
-            timecheck2()
-        else:
-            code = "test" + str(current_time[1])
-
-            for a in range(4):
-                addX = a * 13
-                im = PIL.ImageGrab.grab(bbox=(x1 + addX, y1, x1 + addX + 13, y2))  # X1,Y1,X2,Y2
-
-                im.save(code + str(a) + ".jpg")
-
-            timecheck2()
-
-
-def timecheck2():
-    snipelist = ['04', '12', '19', '27', '34', '42', '49', '57']
-    while True:
-        t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
-        current_time = current_time.split(':')
-        if current_time[1] == '50':
-            print('Stopping bot to prevent crash')
-            break
-        elif current_time[1] in snipelist:
-            tti2()
-        else:
-            print(f'cycling: {current_time[0]}:{current_time[1]} - IZ*ONECord')
-            time.sleep(10)
-            timecheck2()
+y2 = 949
 
 def snipecode():
-    code = "C6R1"
+    code = "Z8F0"
 
-    for a in range(4):
-        addX = a * 13
-        im = PIL.ImageGrab.grab(bbox=(x1 + addX, y1, x1 + addX + 13, y2))  # X1,Y1,X2,Y2
-        immatrix = np.array(im)
+    # for a in range(4):
+    #     addX = a * 13
+        # im = PIL.ImageGrab.grab(bbox=(x1 + addX, y1, x1 + addX + 13, y2))  # X1,Y1,X2,Y2 # A
+    im = PIL.ImageGrab.grab(bbox=(x1, y1, x2, y2))  # X1,Y1,X2,Y2 # B
+    immatrix = np.array(im).T
 
-        im.save(code + str(a) + ".jpg")
+    im.show()
+    print(np.shape(immatrix))
+
+    # file2write = open("matrix" + str(a), 'w') # A
+    file2write = open("matrix", 'w') # B
+    file2write.write(str(immatrix))
+    file2write.close()
+
+    # if a == 0:
+    #     mse(immatrix, immatrix)
+
+
+def snipecode1():
+    code = "Z8F0"
+
+    addX1 = 1 * 13
+    addX2 = 3 * 13
+
+    im1 = PIL.ImageGrab.grab(bbox=(x1 + addX1, y1, x1 + addX1 + 13, y2))  # X1,Y1,X2,Y2
+    immatrix1 = np.array(im1)
+
+    im2 = PIL.ImageGrab.grab(bbox=(x1 + addX2, y1, x1 + addX2 + 13, y2))  # X1,Y1,X2,Y2
+    immatrix2 = np.array(im2)
+
+    mse(immatrix1, immatrix2)
+
+    im1.show()
+    im2.show()
+
+def mse(imageA, imageB):
+	error = np.sum((imageA - imageB.astype("float")) ** 2)
+	error /= float(imageA.shape[0] * imageA.shape[1])
+
+	print(error)
 
 def main():
     snipecode()
+    # snipecode1()
 
-# main()
-timecheck2()
+main()
