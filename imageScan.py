@@ -1,6 +1,7 @@
 import PIL
 import PIL.ImageGrab
 from PIL import Image, ImageEnhance, ImageOps, ImageFilter, ImageChops
+import pyautogui
 import sys
 import os
 import string
@@ -63,15 +64,20 @@ def snipecode():
               ": Error occurred while extracting letters from image. Please contact Rasmit#2547 with a screenshot of the logs.")
         return
 
-    temp_prefix = "I8J9"
+    # temp_prefix = "I8J9"
 
     for i in range(4):
         code += read(immatrixTsplit[2 * i], i)
 
-        print(temp_prefix[i])
-
+        # print(temp_prefix[i])
         # img = Image.fromarray(immatrixTsplit[2 * i]).show()
         # np.save(temp_prefix[i], immatrixTsplit[2 * i])
+
+    print(code)
+
+    pyautogui.click(950, 1007)
+    pyautogui.typewrite('!claim ' + code)
+    pyautogui.hotkey('enter')
 
     endTime = time.time()
     print("End Time: " + str(endTime))
@@ -80,58 +86,71 @@ def snipecode():
 
 def read(matrix, index):
     if (index == 0 or index == 2):
-        characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
-                  "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+        # characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+        #           "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+
+        characters = ["A", "C", "D", "F", "G", "H", "I", "J", "K", "N", "O", "P", "Q",
+                  "R", "T", "U", "V", "W", "X", "Z"]
     else:
         characters = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
+    scores = []
 
-    sampleQ = np.load('./characters/9.npy')
+    for character in characters:
+        # print(character)
 
-    size0 = np.shape(matrix)
-    size1 = np.shape(sampleQ)
-
-    print(size0)
-    print(size1)
-
-    if size0 != size1:
-        if size0[0] > size1[0]:
-            if (size0[1] > size1[1]): # make size10 bigger, make size11 bigger
-                pad_size0 = (0, 0)
-                pad_size1 = (size0[0] - size1[0], size0[1] - size1[1]) # size0 extrema
-            else: # make size10 bigger, make size01 bigger
-                pad_size0 = (0, size1[1] - size0[1])
-                pad_size1 = (size0[0] - size1[0], 0)
-        else:
-            if (size0[1] > size1[1]): # make size00 bigger, make size11 bigger
-                pad_size0 = (size1[0] - size0[0], 0)
-                pad_size1 = (0, size0[1] - size1[1])
-            else: # make size00 bigger, make size01 bigger
-                pad_size0 = (size1[0] - size0[0], size1[1] - size0[1])  # size1 extrema
-                pad_size1 = (0, 0)
-
-        print(pad_size0)
-        print(pad_size1)
-
-        matrix = np.pad(matrix, pad_width=(pad_size0, (0, 0)), mode='constant', constant_values=0)
-        sampleQ = np.pad(sampleQ, pad_width=(pad_size1, (0, 0)), mode='constant', constant_values=0)
+        sampleQ = np.load('./characters/' + character + '.npy')
 
         size0 = np.shape(matrix)
         size1 = np.shape(sampleQ)
 
-        print(size0)
-        print(size1)
+        # print(size0)
+        # print(size1)
 
-    difference = np.subtract(sampleQ, matrix)
-    score = str(np.sum(difference))
+        if size0 != size1:
+            if size0[0] > size1[0]:
+                if (size0[1] > size1[1]):  # make size10 bigger, make size11 bigger
+                    pad_size0 = (0, 0)
+                    pad_size1 = (size0[0] - size1[0], size0[1] - size1[1])  # size0 extrema
+                else:  # make size10 bigger, make size01 bigger
+                    pad_size0 = (0, size1[1] - size0[1])
+                    pad_size1 = (size0[0] - size1[0], 0)
+            else:
+                if (size0[1] > size1[1]):  # make size00 bigger, make size11 bigger
+                    pad_size0 = (size1[0] - size0[0], 0)
+                    pad_size1 = (0, size0[1] - size1[1])
+                else:  # make size00 bigger, make size01 bigger
+                    pad_size0 = (size1[0] - size0[0], size1[1] - size0[1])  # size1 extrema
+                    pad_size1 = (0, 0)
 
-    print(score)
+            # print(pad_size0)
+            # print(pad_size1)
 
-    return "A"
-    # return score
+            matrix = np.pad(matrix, pad_width=(pad_size0, (0, 0)), mode='constant', constant_values=0)
+            sampleQ = np.pad(sampleQ, pad_width=(pad_size1, (0, 0)), mode='constant', constant_values=0)
+
+            size0 = np.shape(matrix)
+            size1 = np.shape(sampleQ)
+
+            # print(size0)
+            # print(size1)
+
+        difference = np.subtract(sampleQ, matrix)
+        score = np.sum(difference)
+        scores.append(score)
+
+        np.save('diff' + str(index), difference)
+
+    result = characters[scores.index(min(scores))]
+
+    print(scores)
+    print(result)
+
+    return result
 
 def main():
+    time.sleep(1)
+
     snipecode()
-    # testLetter("Q")
 
 main()
