@@ -6,7 +6,7 @@ import os
 import string
 import time
 import numpy as np
-from skimage.io import imread, imsave
+from numpy import save, load
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -51,8 +51,6 @@ def snipecode():
     print(changes)
     print(length)
 
-    file0 = open("matrix2", 'w')
-
     code = ""
     
     if length == 9:
@@ -65,28 +63,72 @@ def snipecode():
               ": Error occurred while extracting letters from image. Please contact Rasmit#2547 with a screenshot of the logs.")
         return
 
+    temp_prefix = "I8J9"
+
     for i in range(4):
-        code += read(immatrixTsplit[2 * i])
+        code += read(immatrixTsplit[2 * i], i)
 
-        fileN = open("v" + str(i), "w")
-        fileN.write(str(immatrixTsplit[2 * i]))
-        fileN.close()
+        print(temp_prefix[i])
 
-        file0.write(str(i) + "\n" + str(immatrixTsplit[2 * i]) + "\n")
-
-    file0.close()
-
-    # file1 = open("matrix", 'w')
-    # file1.write(str(immatrixT))
-    # file1.close()
+        # img = Image.fromarray(immatrixTsplit[2 * i]).show()
+        # np.save(temp_prefix[i], immatrixTsplit[2 * i])
 
     endTime = time.time()
     print("End Time: " + str(endTime))
 
     print("Elapsed Time: " + str(endTime - startTime) + " seconds")
 
-def read(matrix):
+def read(matrix, index):
+    if (index == 0 or index == 2):
+        characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+                  "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    else:
+        characters = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+
+
+    sampleQ = np.load('./characters/9.npy')
+
+    size0 = np.shape(matrix)
+    size1 = np.shape(sampleQ)
+
+    print(size0)
+    print(size1)
+
+    if size0 != size1:
+        if size0[0] > size1[0]:
+            if (size0[1] > size1[1]): # make size10 bigger, make size11 bigger
+                pad_size0 = (0, 0)
+                pad_size1 = (size0[0] - size1[0], size0[1] - size1[1]) # size0 extrema
+            else: # make size10 bigger, make size01 bigger
+                pad_size0 = (0, size1[1] - size0[1])
+                pad_size1 = (size0[0] - size1[0], 0)
+        else:
+            if (size0[1] > size1[1]): # make size00 bigger, make size11 bigger
+                pad_size0 = (size1[0] - size0[0], 0)
+                pad_size1 = (0, size0[1] - size1[1])
+            else: # make size00 bigger, make size01 bigger
+                pad_size0 = (size1[0] - size0[0], size1[1] - size0[1])  # size1 extrema
+                pad_size1 = (0, 0)
+
+        print(pad_size0)
+        print(pad_size1)
+
+        matrix = np.pad(matrix, pad_width=(pad_size0, (0, 0)), mode='constant', constant_values=0)
+        sampleQ = np.pad(sampleQ, pad_width=(pad_size1, (0, 0)), mode='constant', constant_values=0)
+
+        size0 = np.shape(matrix)
+        size1 = np.shape(sampleQ)
+
+        print(size0)
+        print(size1)
+
+    difference = np.subtract(sampleQ, matrix)
+    score = str(np.sum(difference))
+
+    print(score)
+
     return "A"
+    # return score
 
 def main():
     snipecode()
