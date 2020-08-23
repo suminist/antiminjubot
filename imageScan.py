@@ -64,14 +64,13 @@ def snipecode():
               ": Error occurred while extracting letters from image. Please contact Rasmit#2547 with a screenshot of the logs.")
         return
 
-    # temp_prefix = "I8J9"
+    temp_prefix = "F9Y8"
 
     for i in range(4):
         code += read(immatrixTsplit[2 * i], i)
 
-        # print(temp_prefix[i])
         # img = Image.fromarray(immatrixTsplit[2 * i]).show()
-        # np.save(temp_prefix[i], immatrixTsplit[2 * i])
+        np.save(temp_prefix[i], immatrixTsplit[2 * i])
 
     print(code)
 
@@ -89,8 +88,8 @@ def read(matrix, index):
         # characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
         #           "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
-        characters = ["A", "C", "D", "F", "G", "H", "I", "J", "K", "N", "O", "P", "Q",
-                  "R", "T", "U", "V", "W", "X", "Z"]
+        characters = ["A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+                  "R", "S", "T", "U", "V", "W", "X", "Z"]
     else:
         characters = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
@@ -138,8 +137,6 @@ def read(matrix, index):
         difference = np.subtract(sampleQ, matrix)
         score = np.sum(difference)
         scores.append(score)
-
-        np.save('diff' + str(index), difference)
 
     result = characters[scores.index(min(scores))]
 
