@@ -62,15 +62,16 @@ def snipecode():
     if length != 7:
         print("Error Code L" + str(length) +
               ": Error occurred while extracting letters from image. Please contact Rasmit#2547 with a screenshot of the logs.")
+        im.show()
         return
 
-    temp_prefix = "F9Y8"
+    temp_prefix = "N2E0"
 
     for i in range(4):
         code += read(immatrixTsplit[2 * i], i)
 
         # img = Image.fromarray(immatrixTsplit[2 * i]).show()
-        np.save(temp_prefix[i], immatrixTsplit[2 * i])
+        # np.save(temp_prefix[i], immatrixTsplit[2 * i])
 
     print(code)
 
@@ -88,7 +89,7 @@ def read(matrix, index):
         # characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
         #           "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
-        characters = ["A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+        characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
                   "R", "S", "T", "U", "V", "W", "X", "Z"]
     else:
         characters = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
@@ -145,9 +146,18 @@ def read(matrix, index):
 
     return result
 
-def main():
-    time.sleep(1)
+def convert():
+    characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+        "R", "S", "T", "U", "V", "W", "X", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
-    snipecode()
+    for character in characters:
+        arr = np.load('./characters/' + character + '.npy')
+        img = Image.fromarray(arr)
+        img.save('./charactersPNG/' + character + '.png')
+
+def main():
+    # snipecode()
+
+    convert()
 
 main()

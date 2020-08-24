@@ -12,6 +12,7 @@ import sys
 from PIL import ImageTk
 import numpy as np
 from numpy import save, load
+import argparse
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -69,8 +70,8 @@ def tti2():
 
             if length != 7:
                 print("Did not find code")
+
                 return
-                # return tti2()
             else:
                 for i in range(4):
                     code += read(immatrixTsplit[2 * i], i)
@@ -160,76 +161,91 @@ def timecheck2():
             time.sleep(10)
             timecheck2()
 
-ht = 360
-wd = 600
-mvall = 0.5
-mvallh = 0.25
-root = tk.Tk()
+parser = argparse.ArgumentParser()
 
-version = 'SYBot V.2.1.0-a.1'
+parser.add_argument("-s", "--server", help="Server")
 
-#main canvas
-canvas = tk.Canvas(root, height=ht,width=wd)
-canvas.pack()
-#background image
-background_img = ImageTk.PhotoImage(Image.open(r'32.png'))
-background_label = tk.Label(root, image=background_img)
-background_label.place(relx=0.5,rely=0.25,relwidth=mvall,relheight=0.5)
-#main frame
-#relx, rely in percentages
-frame = tk.Frame(root, bg='pink')
-frame.place(relx=0, rely=0, relwidth=1, relheight=0.25)
+args = parser.parse_args()
 
-label = tk.Label(frame, text='Starts bot instantly', bg='white')
-label.pack()
+if args.server == "izcord":
+    timecheck2()
 
-button = tk.Button(frame, text="Start Bot", bg='#50A7AB', fg='#000000', command=timecheck2)
-button.pack(side='bottom')
+runGUI()
 
-#frame 2
-frame2 = tk.Frame(root, bg='#92F1FE')
-frame2.place(relx=0, rely=0.25, relwidth=mvall, relheight=mvallh)
+def runGUI():
+    ht = 360
+    wd = 600
+    mvall = 0.5
+    mvallh = 0.25
+    root = tk.Tk()
 
-label2 = tk.Label(frame2, text="WeeeklyCord", bg='white')
-label2.pack()
-label2x = tk.Label(frame2, text="12 | 27 | 42 | 57", bg='white')
-label2x.pack()
+    version = 'SYBot V.2.1.0-a.1'
 
-button2 = tk.Button(frame2, text="Start Bot", bg='#50A7AB', fg='#000000', command=timecheck2)
-button2.pack(side='bottom')
+    #main canvas
+    canvas = tk.Canvas(root, height=ht, width=wd)
+    canvas.pack()
+    #background image
+    background_img = ImageTk.PhotoImage(Image.open(r'32.png'))
+    background_label = tk.Label(root, image=background_img)
+    background_label.place(relx=0.5, rely=0.25, relwidth=mvall, relheight=0.5)
+    #main frame
+    #relx, rely in percentages
+    frame = tk.Frame(root, bg='pink')
+    frame.place(relx=0, rely=0, relwidth=1, relheight=0.25)
 
-#frame 3
-frame3 = tk.Frame(root, bg='#F69AF8')
-frame3.place(relx=0,rely=0.5,relwidth=mvall,relheight=mvallh)
+    label = tk.Label(frame, text='Starts bot instantly', bg='white')
+    label.pack()
 
-label3 = tk.Label(frame3, text="IZ*ONECord", bg='white')
-label3.pack()
-label3x= tk.Label(frame3, text="04 | 12 | 19 | 27 | 34 | 42 | 49 | 57", bg="white")
-label3x.pack()
-
-button3 = tk.Button(frame3, text="Start Bot", bg='#50A7AB', fg='#000000', command=timecheck2)
-button3.pack(side='bottom')
-
-#frame 4
-frame4 = tk.Frame(root, bg='#E2F89A')
-frame4.place(relx=0.25,rely=0.75,relwidth=mvall,relheight=mvallh)
-
-label4 = tk.Label(frame4, text="View scan area", bg='white')
-label4.pack()
-
-button4 = tk.Button(frame4, text="View area", bg='#50A7AB',
+    button = tk.Button(frame, text="Start Bot", bg='#50A7AB',
                     fg='#000000', command=timecheck2)
-button4.pack(side='bottom')
+    button.pack(side='bottom')
 
-#frame 5
-frame5 = tk.Frame(root, bg='#E2F89A')
-frame5.place(relx=0,rely=0.75,relwidth=0.25,relheight=mvallh)
+    #frame 2
+    frame2 = tk.Frame(root, bg='#92F1FE')
+    frame2.place(relx=0, rely=0.25, relwidth=mvall, relheight=mvallh)
 
-label5 = tk.Label(frame5, text="View scan area", bg='white')
-label5.pack()
+    label2 = tk.Label(frame2, text="WeeeklyCord", bg='white')
+    label2.pack()
+    label2x = tk.Label(frame2, text="12 | 27 | 42 | 57", bg='white')
+    label2x.pack()
 
-root.iconbitmap(r'myicon.ico')
-root.title(f'Sniperbot {version}')
+    button2 = tk.Button(frame2, text="Start Bot", bg='#50A7AB',
+                        fg='#000000', command=timecheck2)
+    button2.pack(side='bottom')
 
-root.mainloop()
+    #frame 3
+    frame3 = tk.Frame(root, bg='#F69AF8')
+    frame3.place(relx=0, rely=0.5, relwidth=mvall, relheight=mvallh)
 
+    label3 = tk.Label(frame3, text="IZ*ONECord", bg='white')
+    label3.pack()
+    label3x = tk.Label(
+        frame3, text="04 | 12 | 19 | 27 | 34 | 42 | 49 | 57", bg="white")
+    label3x.pack()
+
+    button3 = tk.Button(frame3, text="Start Bot", bg='#50A7AB',
+                        fg='#000000', command=timecheck2)
+    button3.pack(side='bottom')
+
+    #frame 4
+    frame4 = tk.Frame(root, bg='#E2F89A')
+    frame4.place(relx=0.25, rely=0.75, relwidth=mvall, relheight=mvallh)
+
+    label4 = tk.Label(frame4, text="View scan area", bg='white')
+    label4.pack()
+
+    button4 = tk.Button(frame4, text="View area", bg='#50A7AB',
+                        fg='#000000', command=timecheck2)
+    button4.pack(side='bottom')
+
+    #frame 5
+    frame5 = tk.Frame(root, bg='#E2F89A')
+    frame5.place(relx=0, rely=0.75, relwidth=0.25, relheight=mvallh)
+
+    label5 = tk.Label(frame5, text="View scan area", bg='white')
+    label5.pack()
+
+    root.iconbitmap(r'myicon.ico')
+    root.title(f'Sniperbot {version}')
+
+    root.mainloop()
