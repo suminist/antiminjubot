@@ -76,7 +76,14 @@ def tti2():
                 for i in range(4):
                     code += read(immatrixTsplit[2 * i], i)
 
+                    img = Image.fromarray(immatrixTsplit[2 * i])
+                    img.save('./codes/' + str(i) + '.png')
+
                 print(code)
+
+                if ("1" in code or "I" in code):
+                    print("This ain't it, chief.")
+                    return
 
                 pyautogui.click(950, 1007)
                 pyautogui.typewrite('!claim ' + code)
@@ -94,7 +101,7 @@ def tti2():
 
 def read(matrix, index):
     if (index == 0 or index == 2):
-        characters = ["A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+        characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
                       "R", "S", "T", "U", "V", "W", "X", "Z"]
     else:
         characters = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
@@ -146,7 +153,7 @@ def read(matrix, index):
     return result
 
 def timecheck2():
-    snipelist = ['07', '05', '13', '20', '28', '35', '43', '50', '58']
+    snipelist = ['05', '13', '20', '27', '35', '42', '50', '57']
 
     while True:
         t = time.localtime()
@@ -154,11 +161,10 @@ def timecheck2():
         current_time = current_time.split(':')
 
         if current_time[1] in snipelist:
-            label['text'] = 'Bot commencing'
             tti2()
         else:
             print(f'cycling: {current_time[0]}:{current_time[1]} - IZ*ONECord')
-            time.sleep(10)
+            time.sleep(5)
             timecheck2()
 
 parser = argparse.ArgumentParser()

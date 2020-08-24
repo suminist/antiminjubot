@@ -70,8 +70,8 @@ def snipecode():
     for i in range(4):
         code += read(immatrixTsplit[2 * i], i)
 
-        # img = Image.fromarray(immatrixTsplit[2 * i]).show()
-        # np.save(temp_prefix[i], immatrixTsplit[2 * i])
+        img = Image.fromarray(immatrixTsplit[2 * i]).show()
+        np.save(temp_prefix[i], immatrixTsplit[2 * i])
 
     print(code)
 
@@ -83,6 +83,10 @@ def snipecode():
     print("End Time: " + str(endTime))
 
     print("Elapsed Time: " + str(endTime - startTime) + " seconds")
+
+
+# Need New: 1, 9, E, H, M, O, U, T, L
+# Suspicious Characters: A, N, R, S
 
 def read(matrix, index):
     if (index == 0 or index == 2):
@@ -156,8 +160,8 @@ def convert():
         img.save('./charactersPNG/' + character + '.png')
 
 def main():
-    # snipecode()
+    snipecode()
 
-    convert()
+    # convert()
 
 main()
