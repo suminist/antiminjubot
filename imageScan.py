@@ -152,7 +152,7 @@ def convert():
 
     for character in characters:
         arr = np.load('./characters/' + character + '.npy')
-        img = Image.fromarray(arr)
+        img = Image.fromarray(arr.T)
         img.save('./charactersPNG/' + character + '.png')
 
 def main():
