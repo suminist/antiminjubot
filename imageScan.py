@@ -18,7 +18,6 @@ y2 = 949
 
 def snipecode():
     startTime = time.time()
-    print("Start time: " + str(startTime))
 
     im = PIL.ImageGrab.grab(bbox=(x1, y1, x2, y2))
 
@@ -27,7 +26,7 @@ def snipecode():
     immatrix = np.array(im)
     immatrixT = immatrix.T[0]
 
-    thresholdIndices0 = immatrixT < 160
+    thresholdIndices0 = immatrixT < 160 #160
     immatrixT[thresholdIndices0] = 0
 
     thresholdIndices1 = immatrixT > 200
@@ -46,11 +45,11 @@ def snipecode():
     immatrixTsplit = np.split(immatrixT, changes)
     length = np.shape(immatrixTsplit)[0]
 
-    print(score)
-    print(zero)
-    print(nonzero)
-    print(changes)
-    print(length)
+    # print(score)
+    # print(zero)
+    # print(nonzero)
+    # print(changes)
+    # print(length)
 
     code = ""
     
@@ -62,31 +61,38 @@ def snipecode():
     if length != 7:
         print("Error Code L" + str(length) +
               ": Error occurred while extracting letters from image. Please contact Rasmit#2547 with a screenshot of the logs.")
-        im.show()
+        # im.show()
         return
 
-    temp_prefix = "N2E0"
+    temp_prefix = str(startTime)[-6:]
+    os.mkdir('./tests/' + temp_prefix)
+
+    # temp_prefix = "B9O2"
+    # os.mkdir('./tests/' + temp_prefix)
 
     for i in range(4):
         code += read(immatrixTsplit[2 * i], i)
 
-        img = Image.fromarray(immatrixTsplit[2 * i]).show()
-        np.save(temp_prefix[i], immatrixTsplit[2 * i])
+        img = Image.fromarray(immatrixTsplit[2 * i]).save('./tests/' + temp_prefix + '/' + str(i) + '.png')
+        np.save('./tests/' + temp_prefix + '/' + str(i), immatrixTsplit[2 * i])
+
+        # img = Image.fromarray(immatrixTsplit[2 * i]).save('./tests/' + temp_prefix + '/' + temp_prefix[i] + '.png')
+        # np.save('./tests/' + temp_prefix + '/' + temp_prefix[i], immatrixTsplit[2 * i])
 
     print(code)
 
-    pyautogui.click(950, 1007)
-    pyautogui.typewrite('!claim ' + code)
-    pyautogui.hotkey('enter')
+    if ("I" in code or "1" in code):
+        print("This ain't it chief")
+    else:
+        pyautogui.click(900, 950)
+        pyautogui.typewrite('!claim ' + code)
+        pyautogui.hotkey('enter')
 
     endTime = time.time()
+    print("Start time: " + str(startTime))
     print("End Time: " + str(endTime))
 
     print("Elapsed Time: " + str(endTime - startTime) + " seconds")
-
-
-# Need New: 1, 9, E, H, M, O, U, T, L
-# Suspicious Characters: A, N, R, S
 
 def read(matrix, index):
     if (index == 0 or index == 2):
@@ -160,8 +166,25 @@ def convert():
         img.save('./charactersPNG/' + character + '.png')
 
 def main():
-    snipecode()
+    # snipecode()
+    snipelist = ['05', '13', '20', '31', '39', '46', '54', '01']
 
-    # convert()
+    while True:
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        current_time = current_time.split(':')
+
+        if current_time[1] in snipelist:
+            snipecode()
+        else:
+            print(f'cycling: {current_time[0]}:{current_time[1]} - IZ*ONECord')
+            time.sleep(5)
+            main()
+
+def loop():
+    while True:
+        time.sleep(2)
+        snipecode()
 
 main()
+# loop()
