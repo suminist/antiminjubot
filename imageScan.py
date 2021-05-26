@@ -1,6 +1,6 @@
 import PIL
 import PIL.ImageGrab
-from PIL import Image, ImageEnhance, ImageOps, ImageFilter, ImageChops
+from PIL import Image
 import pyautogui
 import sys
 import os
@@ -137,7 +137,7 @@ def read(matrix, index):
 
                     a = math.ceil(l/2)
                     b = math.ceil(m/2)
-                    
+
                     pad_size0 = ((0,0), (a, l - a))
                     pad_size1 = ((b, m - b), (0,0))
             else:

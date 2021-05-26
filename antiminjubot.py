@@ -1,19 +1,23 @@
 import pyautogui
-import PIL
 import pytesseract as tess
-tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+import PIL
 from PIL import Image, ImageEnhance, ImageOps, ImageFilter, ImageChops
 import PIL.ImageGrab
 import time
 import datetime
 import string
+
+tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
 stoplist = ['08','23', '38', '53']
+
 # part of the screen
 def tti():
     while True:
         t = time.localtime()
         current_time = time.strftime("%H:%M:%S", t)
         current_time = current_time.split(':')
+
         if current_time[1] in stoplist:
             print('it is not time yet')
             timecheck()
@@ -71,9 +75,11 @@ def tti():
                 else:
                     text = ''.join(lz[0:4])
                     text = text.upper()
-                    # pyautogui.typewrite(f'!claim {text}')
-                    # pyautogui.hotkey('enter')
-                    # time.sleep(2)
+
+                    pyautogui.typewrite(f'!claim {text}')
+                    pyautogui.hotkey('enter')
+                    time.sleep(2)
+
                     print('Mission Success we got em bois')
                     print(text)
                     timecheck()
@@ -84,19 +90,25 @@ def tti():
 def timecheck():
     while True:
         snipelist = ['07','22', '37', '52']
+
         t = time.localtime()
         current_time = time.strftime("%H:%M:%S", t)
         current_time = current_time.split(':')
+
         print(current_time)
+
         restartlist = ['49', '50']
+
         if current_time[1] in restartlist:
             break
         else:
             if current_time[1] in snipelist:
                 print('mission commence')
+
                 tti()
             else:
                 print(f'cycling: {current_time[1]}')
+
                 time.sleep(10)
                 timecheck()
 
